@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/">
+        <file>main.qml</file>
+        <file>images/Texas-Instruments.png</file>
+    </qresource>
+</RCC>
