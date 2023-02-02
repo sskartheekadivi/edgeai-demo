@@ -1,18 +1,23 @@
 import QtQuick 2.15
 import QtQuick.Window 2.15
-import QtQuick.Controls 1.4
-import QtQuick.Controls.Styles 1.4
-
+// import QtQuick.Controls 1.4
+// import QtQuick.Controls.Styles 1.4
+// import QtQuick.Window 2.2
+import QtQuick.Controls 2.12
+// import QtQuick.Controls.Styles 2.12
 
 Window {
     width: 1920
     height: 1080
     visible: true
-    title: qsTr("Hello World")
+    // TODO: Enable this to display the demo in fullscreen
+    // visibility: "FullScreen"
+    title: qsTr("AM62A EdgeAI Demo")
 
 
     Rectangle {
         id: background
+        color: "#17252A"
         width: parent.width
         height: parent.height
 
@@ -24,7 +29,7 @@ Window {
             anchors.top: background.top
             anchors.left: background.left
 
-            color: "#77cc44"
+            color: "#17252A"
 
             Image {
                 id: topBarLogo
@@ -58,7 +63,7 @@ Window {
             anchors.top: topBar.bottom
             anchors.left: background.left
 
-            color: "#446677"
+            color: "#17252A"
 
             Button {
                 id: leftMenuButton1
@@ -70,14 +75,16 @@ Window {
                 anchors.topMargin: parent.height * 0.1
                 anchors.horizontalCenter: parent.horizontalCenter
 
+                /*
                 style: ButtonStyle {
                     background: Rectangle {
                         border.width: leftMenuButton1.clicked ? 1 : 10
-                        border.color: "#ff0000"
+                        border.color: "#DEF2F1"
                         radius: 4
-                        color: "#FFFFFF"
+                        color: "#2B7A78"
                     }
                 }
+                */
             }
 
             Button {
@@ -90,14 +97,16 @@ Window {
                 anchors.topMargin: parent.height * 0.1
                 anchors.horizontalCenter: parent.horizontalCenter
 
+                /*
                 style: ButtonStyle {
                     background: Rectangle {
                         border.width: leftMenuButton2.clicked ? 1 : 10
-                        border.color: "#ff0000"
+                        border.color: "#DEF2F1"
                         radius: 4
-                        color: "#FFFFFF"
+                        color: "#2B7A78"
                     }
                 }
+                */
             }
             Button {
                 id: leftMenuButton3
@@ -109,14 +118,16 @@ Window {
                 anchors.topMargin: parent.height * 0.1
                 anchors.horizontalCenter: parent.horizontalCenter
 
+                /*
                 style: ButtonStyle {
                     background: Rectangle {
                         border.width: leftMenuButton3.clicked ? 1 : 10
-                        border.color: "#ff0000"
+                        border.color: "#DEF2F1"
                         radius: 4
-                        color: "#FFFFFF"
+                        color: "#2B7A78"
                     }
                 }
+                */
             }
             Button {
                 id: leftMenuButton4
@@ -128,16 +139,19 @@ Window {
                 anchors.topMargin: parent.height * 0.1
                 anchors.horizontalCenter: parent.horizontalCenter
 
+                /*
                 style: ButtonStyle {
                     background: Rectangle {
                         border.width: leftMenuButton4.clicked ? 1 : 10
-                        border.color: "#ff0000"
+                        border.color: "#DEF2F1"
                         radius: 4
-                        color: "#FFFFFF"
+                        color: "#2B7A78"
                     }
                 }
+                */
+                onClicked: popup.open()
             }
-    }
+        }
         Rectangle {
             id: mainWindow
 
@@ -146,7 +160,7 @@ Window {
             anchors.top: topBar.bottom
             anchors.left: leftMenu.right
 
-            color: "#c23469"
+            color: "#17252A"
         }
         Rectangle {
             id: bottomBar
@@ -156,8 +170,94 @@ Window {
             anchors.top: mainWindow.bottom
             anchors.left: leftMenu.right
 
-            color: "#ffff66"
+            color: "#17252A"
+
+            Button {
+                id: bottomBarButton1
+                text: "Start / Stop"
+
+                height: parent.height * 0.7
+                width: parent.width * 0.2
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.left: parent.left
+                anchors.leftMargin: parent.width * 0.2
+
+                /*
+                style: ButtonStyle {
+                    background: Rectangle {
+                        border.width: bottomBarButton1.clicked ? 1 : 10
+                        border.color: "#DEF2F1"
+                        radius: 4
+                        color: "#2B7A78"
+                    }
+                }
+                */
+            }
+            Button {
+                id: bottomBarButton2
+                text: "Exit"
+
+                height: parent.height * 0.7
+                width: parent.width * 0.2
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.right: parent.right
+                anchors.rightMargin: parent.width * 0.2
+
+                /*
+                style: ButtonStyle {
+                    background: Rectangle {
+                        border.width: bottomBarButton2.clicked ? 1 : 10
+                        border.color: "#DEF2F1"
+                        radius: 4
+                        color: "#2B7A78"
+                    }
+                }
+                */
+            }
         }
+    }
+
+    Popup {
+        id: popup
+
+        leftMargin: parent.width * 0.1
+        width: parent.width * 0.8
+        topMargin: parent.height * 0.1
+        height: parent.height * 0.8
+
+        modal: true
+        focus: true
+        closePolicy: Popup.CloseOnEscape
+
+        background: Rectangle {
+            width: parent.width
+            height: parent.height
+            border.color: "#DEF2F1"
+            border.width: 10
+        }
+
+        ComboBox {
+            width: 200
+            // model: [ "Banana", "Apple", "Coconut" ]
+            model: ListModel {
+                ListElement { text: "Banana"; color: "Yellow" }
+                ListElement { text: "Apple"; color: "Green" }
+                ListElement { text: "Coconut"; color: "Brown" }
+            }
+        }
+        /* contentItem: Column {
+            ComboBox {
+                currentIndex: 1
+                model: ListModel {
+                    id: cbItems
+                    ListElement { text: "Banana"; color: "Yellow" }
+                    ListElement { text: "Apple"; color: "Green" }
+                    ListElement { text: "Coconut"; color: "Brown" }
+                }
+                width: 200
+                onCurrentIndexChanged: console.debug(cbItems.get(currentIndex).text + ", " + cbItems.get(currentIndex).color)
+            }
+        } */
     }
     /*
     Rectangle {
