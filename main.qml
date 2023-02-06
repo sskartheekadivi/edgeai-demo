@@ -6,8 +6,6 @@ import QtQuick.Window 2.15
 import QtQuick.Controls 2.12
 // import QtQuick.Controls.Styles 2.12
 import QtMultimedia 5.15
-import io.qt.examples.backend 1.0
-import MyLabelLib 1.0
 
 Window {
     width: 1920
@@ -43,6 +41,7 @@ Window {
 
             Text {
                 id: topBarHead
+                objectName: "topBarHead"
                 text: qsTr("AM62A EdgeAI Demo")
 
                 width: parent.width * 0.8
@@ -67,22 +66,11 @@ Window {
             anchors.left: background.left
 
             color: "#17252A"
-            BackEnd {
-                id: backend
-            }
 
-            TextField {
-                text: backend.userName
-                placeholderText: qsTr("User name")
-                anchors.left: parent.left
-                anchors.top: parent.top
-
-                onEditingFinished: backend.userName = text
-            }
             Button {
                 id: leftMenuButton1
                 text: "Image Classification"
-
+		onClicked: mediaplayer1.source = buttonsClicked.leftMenuButton1Clicked()
                 height: parent.height * 0.1
                 width: parent.width * 0.8
                 anchors.top: parent.top
@@ -93,7 +81,7 @@ Window {
             Button {
                 id: leftMenuButton2
                 text: "Semantic Segmentation"
-
+		onClicked: mediaplayer1.source = buttonsClicked.leftMenuButton2Clicked()
                 height: parent.height * 0.1
                 width: parent.width * 0.8
                 anchors.top: leftMenuButton1.bottom
@@ -103,7 +91,7 @@ Window {
             Button {
                 id: leftMenuButton3
                 text: "Object Detection"
-
+		onClicked: mediaplayer1.source = buttonsClicked.leftMenuButton3Clicked()
                 height: parent.height * 0.1
                 width: parent.width * 0.8
                 anchors.top: leftMenuButton2.bottom
@@ -132,17 +120,12 @@ Window {
             anchors.left: leftMenu.right
 
             color: "#17252A"
-            MyLabel {
-                id: mylabel
-            }
+
             MediaPlayer {
                 id: mediaplayer1
                 objectName: "mediaplayer1"
                 // source:
                 autoPlay: true
-                Component.onCompleted: {
-                    mylabel.setMyObject(hellowWorldLabel);
-                }
             }
 
             VideoOutput {

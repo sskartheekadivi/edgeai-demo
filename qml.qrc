@@ -2,10 +2,5 @@
     <qresource prefix="/">
         <file>main.qml</file>
         <file>images/Texas-Instruments.png</file>
-        <file>images/exit.png</file>
-        <file>images/cancel.png</file>
-        <file>images/stop.png</file>
-        <file>images/start.png</file>
-        <file>images/photo01.jpg</file>
     </qresource>
 </RCC>
