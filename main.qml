@@ -5,6 +5,9 @@ import QtQuick.Window 2.15
 // import QtQuick.Window 2.2
 import QtQuick.Controls 2.12
 // import QtQuick.Controls.Styles 2.12
+import QtMultimedia 5.15
+import io.qt.examples.backend 1.0
+import MyLabelLib 1.0
 
 Window {
     width: 1920
@@ -64,7 +67,18 @@ Window {
             anchors.left: background.left
 
             color: "#17252A"
+            BackEnd {
+                id: backend
+            }
 
+            TextField {
+                text: backend.userName
+                placeholderText: qsTr("User name")
+                anchors.left: parent.left
+                anchors.top: parent.top
+
+                onEditingFinished: backend.userName = text
+            }
             Button {
                 id: leftMenuButton1
                 text: "Image Classification"
@@ -74,17 +88,6 @@ Window {
                 anchors.top: parent.top
                 anchors.topMargin: parent.height * 0.1
                 anchors.horizontalCenter: parent.horizontalCenter
-
-                /*
-                style: ButtonStyle {
-                    background: Rectangle {
-                        border.width: leftMenuButton1.clicked ? 1 : 10
-                        border.color: "#DEF2F1"
-                        radius: 4
-                        color: "#2B7A78"
-                    }
-                }
-                */
             }
 
             Button {
@@ -96,17 +99,6 @@ Window {
                 anchors.top: leftMenuButton1.bottom
                 anchors.topMargin: parent.height * 0.1
                 anchors.horizontalCenter: parent.horizontalCenter
-
-                /*
-                style: ButtonStyle {
-                    background: Rectangle {
-                        border.width: leftMenuButton2.clicked ? 1 : 10
-                        border.color: "#DEF2F1"
-                        radius: 4
-                        color: "#2B7A78"
-                    }
-                }
-                */
             }
             Button {
                 id: leftMenuButton3
@@ -117,17 +109,6 @@ Window {
                 anchors.top: leftMenuButton2.bottom
                 anchors.topMargin: parent.height * 0.1
                 anchors.horizontalCenter: parent.horizontalCenter
-
-                /*
-                style: ButtonStyle {
-                    background: Rectangle {
-                        border.width: leftMenuButton3.clicked ? 1 : 10
-                        border.color: "#DEF2F1"
-                        radius: 4
-                        color: "#2B7A78"
-                    }
-                }
-                */
             }
             Button {
                 id: leftMenuButton4
@@ -139,16 +120,6 @@ Window {
                 anchors.topMargin: parent.height * 0.1
                 anchors.horizontalCenter: parent.horizontalCenter
 
-                /*
-                style: ButtonStyle {
-                    background: Rectangle {
-                        border.width: leftMenuButton4.clicked ? 1 : 10
-                        border.color: "#DEF2F1"
-                        radius: 4
-                        color: "#2B7A78"
-                    }
-                }
-                */
                 onClicked: popup.open()
             }
         }
@@ -161,6 +132,25 @@ Window {
             anchors.left: leftMenu.right
 
             color: "#17252A"
+            MyLabel {
+                id: mylabel
+            }
+            MediaPlayer {
+                id: mediaplayer1
+                objectName: "mediaplayer1"
+                // source:
+                autoPlay: true
+                Component.onCompleted: {
+                    mylabel.setMyObject(hellowWorldLabel);
+                }
+            }
+
+            VideoOutput {
+                id: videooutput
+                width: parent.width
+                height: parent.height
+                source: mediaplayer1
+            }
         }
         Rectangle {
             id: bottomBar
@@ -173,7 +163,7 @@ Window {
             color: "#17252A"
 
             Button {
-                id: bottomBarButton1
+                id: startstop
                 text: "Start / Stop"
 
                 height: parent.height * 0.7
@@ -182,19 +172,22 @@ Window {
                 anchors.left: parent.left
                 anchors.leftMargin: parent.width * 0.2
 
-                /*
-                style: ButtonStyle {
-                    background: Rectangle {
-                        border.width: bottomBarButton1.clicked ? 1 : 10
-                        border.color: "#DEF2F1"
-                        radius: 4
-                        color: "#2B7A78"
+                onClicked: (mouse)=> {
+                    if (mediaplayer1.playbackState===1) {
+                        mediaplayer1.pause();
+                        bottomBar.change()
+                    }
+                    else if (mediaplayer1.playbackState===2) {
+                        mediaplayer1.play();
+                        bottomBar.change()
                     }
                 }
-                */
+            }
+            function change() {
+                startstop.text = mediaplayer1.playbackState===2?"Start":"Stop"
             }
             Button {
-                id: bottomBarButton2
+                id: exitbutton
                 text: "Exit"
 
                 height: parent.height * 0.7
@@ -203,16 +196,7 @@ Window {
                 anchors.right: parent.right
                 anchors.rightMargin: parent.width * 0.2
 
-                /*
-                style: ButtonStyle {
-                    background: Rectangle {
-                        border.width: bottomBarButton2.clicked ? 1 : 10
-                        border.color: "#DEF2F1"
-                        radius: 4
-                        color: "#2B7A78"
-                    }
-                }
-                */
+                onClicked: Qt.quit()
             }
         }
     }
@@ -245,105 +229,5 @@ Window {
                 ListElement { text: "Coconut"; color: "Brown" }
             }
         }
-        /* contentItem: Column {
-            ComboBox {
-                currentIndex: 1
-                model: ListModel {
-                    id: cbItems
-                    ListElement { text: "Banana"; color: "Yellow" }
-                    ListElement { text: "Apple"; color: "Green" }
-                    ListElement { text: "Coconut"; color: "Brown" }
-                }
-                width: 200
-                onCurrentIndexChanged: console.debug(cbItems.get(currentIndex).text + ", " + cbItems.get(currentIndex).color)
-            }
-        } */
     }
-    /*
-    Rectangle {
-        id: root1
-        width: parent.width / 2
-        height: parent.height
-        color: "#77cc44"
-
-        MediaPlayer {
-            id: mediaplayer1
-            source: "gst-pipeline: v4l2src ! video/x-raw,framerate=30/1 ! decodebin ! videoconvert ! qtvideosink"
-            autoPlay: true
-        }
-
-        VideoOutput {
-            id: camoutput
-            width: parent.width
-            height: parent.height
-            source: mediaplayer1
-        }
-
-        Button {
-            id: cameraplaypause
-            text: "Camera Pause"
-            height: parent.height / 10
-            anchors.bottom: parent.bottom
-            anchors.left: parent.left
-            anchors.right: parent.right
-
-            onClicked: (mouse)=> {
-                if (mediaplayer1.playbackState===1) {
-                    mediaplayer1.pause();
-                    root1.change()
-                }
-                else if (mediaplayer1.playbackState===2) {
-                    mediaplayer1.play();
-                    root1.change()
-                }
-            }
-        }
-        function change() {
-            cameraplaypause.text = mediaplayer1.playbackState===2?"Camera Play":"Camera Pause"
-        }
-    }
-    Rectangle {
-        id: root2
-        anchors.right: parent.right
-        width: parent.width / 2
-        height: parent.height
-        color: "#77cc44"
-
-        MediaPlayer {
-            id: mediaplayer2
-            source: "gst-pipeline: videotestsrc ! qtvideosink"
-            autoPlay: true
-        }
-
-        VideoOutput {
-            id: videooutput
-            width: parent.width
-            height: parent.height
-            source: mediaplayer2
-        }
-
-        Button {
-            id: videoplaypause
-            text: "Video Pause"
-            height: parent.height / 10
-            anchors.bottom: parent.bottom
-            anchors.left: parent.left
-            anchors.right: parent.right
-
-            onClicked: (mouse)=> {
-                if (mediaplayer2.playbackState===1) {
-                    mediaplayer2.pause();
-                    root2.change()
-                }
-                else if (mediaplayer2.playbackState===2) {
-                    mediaplayer2.play();
-                    root2.change()
-                }
-            }
-        }
-        function change() {
-            videoplaypause.text = mediaplayer2.playbackState===2?"Video Play":"Video Pause"
-        }
-    }
-    */
 }
