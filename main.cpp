@@ -3,13 +3,17 @@
 #include <QQmlContext>
 #include "ButtonsClicked.h"
 
+int ButtonsClicked::activeButton = 0;
+
 int main(int argc, char *argv[]) {
   QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
   QGuiApplication app(argc, argv);
   QQmlApplicationEngine engine;
 
   ButtonsClicked buttonsClicked;
+  PopupMenu popupMenu;
   engine.rootContext()->setContextProperty("buttonsClicked", &buttonsClicked);
+  engine.rootContext()->setContextProperty("popupMenu", &popupMenu);
 
   engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
   if (engine.rootObjects().isEmpty())
