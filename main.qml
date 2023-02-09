@@ -2,7 +2,7 @@ import QtQuick 2.1
 import QtQuick.Window 2.1
 import QtQuick.Controls 2.1
 import QtMultimedia 5.1
-import Qt.labs.folderlistmodel 2.1
+import Qt.labs.folderlistmodel 2.4
 
 Window {
     // width: 1920
@@ -50,6 +50,24 @@ Window {
                 verticalAlignment: Text.AlignVCenter
                 horizontalAlignment: Text.AlignHCenter
             }
+
+            Button {
+                id: topBarExitButton
+                text: "X"
+                onClicked: Qt.quit()
+                height: parent.height * 0.2
+                width: height
+                // anchors.verticalCenter: parent.verticalCenter
+                anchors.right: parent.right
+                anchors.rightMargin: width
+                anchors.top: parent.top
+                anchors.topMargin: height
+
+                background: Rectangle {
+                    color: parent.hovered ? "#CC0000" : "#FF0000"
+                    radius: parent.height
+                }
+            }
         }
         Rectangle {
             id: leftMenu
@@ -80,7 +98,6 @@ Window {
                 onClicked: {
                     mediaplayer1.source = buttonsClicked.leftMenuButtonClicked(1, leftMenu.width, topBar.height, videooutput.width, videooutput.height)
                     console.log("buttonsClicked.activeButton == ", buttonsClicked.activeButton)
-                    console.log("activeButton == ", activeButton)
                 }
             }
 
@@ -94,7 +111,7 @@ Window {
                 anchors.horizontalCenter: parent.horizontalCenter
                 background: Rectangle {
                     id: leftMenuButton2BG
-                    color: leftMenuButton2.down ? "#3AAFA9" : "#2B7A78"
+                    color: !parent.enabled ? "#17252A" : (parent.hovered ? "#FF0000" : (buttonsClicked.activeButton===1? "#00FF00" : "#0000FF"))
                     border.color: "#DEF2F1"
                     border.width: 1
                     radius: 10
@@ -102,7 +119,6 @@ Window {
                 onClicked: {
                     mediaplayer1.source = buttonsClicked.leftMenuButtonClicked(2, leftMenu.width, topBar.height, videooutput.width, videooutput.height)
                     console.log("buttonsClicked.activeButton == ", buttonsClicked.activeButton)
-                    console.log("activeButton == ", activeButton)
                 }
             }
             Button {
@@ -115,14 +131,14 @@ Window {
                 anchors.horizontalCenter: parent.horizontalCenter
                 background: Rectangle {
                     id: leftMenuButton3BG
-                    color: leftMenuButton3.down ? "#3AAFA9" : "#2B7A78"
+                    color: !parent.enabled ? "#17252A" : (parent.hovered ? "#FF0000" : (buttonsClicked.activeButton===1? "#00FF00" : "#0000FF"))
                     border.color: "#DEF2F1"
                     border.width: 1
                     radius: 10
                 }
                 onClicked: {
                     mediaplayer1.source = buttonsClicked.leftMenuButtonClicked(3, leftMenu.width, topBar.height, videooutput.width, videooutput.height)
-                    leftMenuButton3BG.color = "#3AAFA9"
+                    console.log("buttonsClicked.activeButton == ", buttonsClicked.activeButton)
                 }
             }
             Button {
@@ -135,99 +151,50 @@ Window {
                 anchors.horizontalCenter: parent.horizontalCenter
                 background: Rectangle {
                     id: leftMenuButton4BG
-                    color: leftMenuButton4.down ? "#3AAFA9" : "#2B7A78"
+                    color: !parent.enabled ? "#17252A" : (parent.hovered ? "#FF0000" : (buttonsClicked.activeButton===1? "#00FF00" : "#0000FF"))
                     border.color: "#DEF2F1"
                     border.width: 1
                     radius: 10
                 }
                 onClicked: {
-                    leftMenuButton4BG.color = "#3AAFA9"
+                    console.log("buttonsClicked.activeButton == ", buttonsClicked.activeButton)
                     popup.open()
                 }
             }
         }
         Rectangle {
             id: mainWindow
-
+            color: "#17252A"
             width: parent.width * 0.825
-            height: parent.height * 0.8
+            height: parent.height * 0.9
             anchors.top: topBar.bottom
             anchors.left: leftMenu.right
             anchors.rightMargin: parent.width * 0.025
 
-            border.color: "#DEF2F1"
-            border.width: 1
-
-            radius: 10
-            color: "#17252A"
-
-            MediaPlayer {
-                id: mediaplayer1
-                objectName: "mediaplayer1"
-                // source: is provided by the Cpp Backend
-                autoPlay: false
-            }
-
-            VideoOutput {
-                id: videooutput
-                // anchors.margins: 2
+            Rectangle {
                 width: parent.width
-                height: parent.height
-                source: mediaplayer1
-                fillMode: VideoOutput.PreserveAspectCrop
-            }
-        }
-        Rectangle {
-            id: bottomBar
-
-            width: parent.width * 0.9
-            height: parent.height * 0.1
-            anchors.top: mainWindow.bottom
-            anchors.left: leftMenu.right
-
-            color: "#17252A"
-
-            Button {
-                id: startstop
-                text: "Start"
-                onClicked: (mouse)=> {
-                    if ((mediaplayer1.playbackState === 0) || (mediaplayer1.playbackState === 2)) {
-                        mediaplayer1.play()
-                        startstop.text = "Stop"
-                    }
-                    else if (mediaplayer1.playbackState === 1) {
-                        mediaplayer1.stop()
-                        startstop.text = "Start"
-                    }
-                }
-                height: parent.height * 0.7
-                width: parent.width * 0.2
+                height: (parent.width / 16) * 9
+                anchors.horizontalCenter: parent.horizontalCenter
                 anchors.verticalCenter: parent.verticalCenter
-                anchors.left: parent.left
-                anchors.leftMargin: parent.width * 0.2
+                border.color: "#DEF2F1"
+                border.width: 1
 
-                background: Rectangle {
-                    color: leftMenuButton4.down ? "#3AAFA9" : "#2B7A78"
-                    border.color: "#DEF2F1"
-                    border.width: 1
-                    radius: 10
+                radius: 10
+                color: "#17252A"
+
+                MediaPlayer {
+                    id: mediaplayer1
+                    objectName: "mediaplayer1"
+                    // source: is provided by the Cpp Backend
+                    autoPlay: true
                 }
-            }
-            Button {
-                id: exitbutton
-                text: "Exit"
-                onClicked: Qt.quit()
-                height: parent.height * 0.7
-                width: parent.width * 0.2
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.right: parent.right
-                anchors.rightMargin: parent.width * 0.2
 
-                background: Rectangle {
-                    color: leftMenuButton4.down ? "#3AAFA9" : "#2B7A78"
-                    border.color: "#DEF2F1"
-                    border.width: 1
-                    radius: 10
+                VideoOutput {
+                    id: videooutput
+                    width: parent.width
+                    height: parent.height
+                    source: mediaplayer1
+                    fillMode: VideoOutput.PreserveAspectCrop
                 }
             }
         }
@@ -252,25 +219,41 @@ Window {
             border.width: 10
         }
 
+        Text {
+            id: inputTypeHead
+            text: qsTr("Input Type: ")
+            font.pointSize: 15
+            anchors.top: parent.top
+            anchors.topMargin: parent.height * 0.2
+            anchors.left: parent.left
+            anchors.leftMargin: parent.width * 0.15
+        }
+
         ComboBox {
             id: popupInputType
             width: parent.width * 0.3
-            anchors.top: parent.top
-            anchors.topMargin: parent.height * 0.2
+            anchors.top: inputTypeHead.bottom
+            anchors.topMargin: inputTypeHead.font.pointSize * 0.5
             anchors.left: parent.left
             anchors.leftMargin: parent.width * 0.15
             currentIndex: 0
             editable: true
             model: ListModel {
                 id: popupInputTypeOptions
-                ListElement { textRole: "Input Type" }
-                ListElement { textRole: "Image" }
-                ListElement { textRole: "Video" }
-                ListElement { textRole: "Camera" }
+                ListElement { name: "Input Type" }
+                ListElement { name: "Image" }
+                ListElement { name: "Video" }
+                ListElement { name: "Camera" }
             }
             onCurrentIndexChanged: {
                 console.debug(popupInputTypeOptions.get(currentIndex).textRole)
-                popupMenu.popupInputTypeSelected(popupInputTypeOptions.get(currentIndex.textRole))
+                popupMenu.popupInputTypeSelected(popupInputTypeOptions.get(currentIndex).name)
+                if (popupInputTypeOptions.get(currentIndex.name) === "Image")
+                    inputsFolder.folder = "file:///home/kart/Pictures"
+                if (popupInputTypeOptions.get(currentIndex.name) === "Video")
+                    inputsFolder.folder = "file:///home/kart/Videos"
+                if (popupInputTypeOptions.get(currentIndex.name) === "Camera")
+                    inputsFolder.folder = "file:///dev"
             }
         }
         ComboBox {
@@ -285,8 +268,8 @@ Window {
             textRole: "fileName"
 
             FolderListModel {
-                id: folderModel
-                folder: ""
+                id: inputsFolder
+                folder: "file:///dev"
             }
             onCurrentIndexChanged: console.debug(popupInputOptions.get(currentIndex).textRole)
         }
@@ -298,16 +281,14 @@ Window {
             anchors.topMargin: parent.height * 0.1
             anchors.left: parent.left
             anchors.leftMargin: parent.width * 0.15
-            currentIndex: 0
-            editable: true
-            model: ListModel {
-                id: popupModelOptions
-                ListElement { textRole: "Model" }
-                ListElement { textRole: "Model1" }
-                ListElement { textRole: "Model2" }
-                ListElement { textRole: "Model3" }
+            model: folderModel
+            textRole: "fileName"
+
+            FolderListModel {
+                id: modelsFolder
+                folder: "/opt/models_zoo/"
             }
-            onCurrentIndexChanged: console.debug(popupModelOptions.get(currentIndex).textRole)
+            onCurrentIndexChanged: console.debug(popupInputOptions.get(currentIndex).textRole)
         }
     }
 }

@@ -8,14 +8,20 @@ class ButtonsClicked : public QObject {
     Q_OBJECT
 public:
     static qint32 activeButton;
-    // qint32 activeButton;
+
+    Q_PROPERTY(qint32 activeButton READ getActiveButton NOTIFY activeButtonChanged);
+
+    int getActiveButton() const {
+        return activeButton;
+    };
+
     explicit ButtonsClicked (QObject* parent = nullptr) : QObject(parent) {}
 
     Q_INVOKABLE QString leftMenuButtonClicked(qint32 button, int x, int y, int width, int height) {
         ostringstream pipeline;
         cout << "c++ button value = " << button << endl;
         activeButton = button;
-        emit activeButton;
+
         cout << "c++ active button value = " << activeButton << endl;
         if (button == 1) {
             pipeline << "gst-pipeline: videotestsrc pattern=18 ! videoconvert ! videoscale ! capsfilter caps=\"video/x-raw, width=" << width << ", height=" << height << "\" ! qtvideosink";
@@ -32,6 +38,8 @@ public:
         }
         return QString().fromStdString(pipeline.str());
     }
+signals:
+    void activeButtonChanged();
 };
 
 class PopupMenu : public QObject {
@@ -40,7 +48,6 @@ public:
     explicit PopupMenu (QObject* parent = nullptr) : QObject(parent) {}
 
     Q_INVOKABLE void popupInputTypeSelected(QString InputType) {
-            qDebug() << "Input Type = " << InputType.toStdString().data();
-            // cout << "Input Type = " << InputType.toStdString();
+            qDebug() << "Input Type = " << InputType.data() << Qt::endl;
     }
 };
