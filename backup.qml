@@ -3,10 +3,11 @@ import QtQuick.Window 2.1
 import QtQuick.Controls 2.1
 import QtMultimedia 5.1
 import Qt.labs.folderlistmodel 2.1
+import QtQuick.Layouts 1.15
 
 Window {
-    // width: 1920
-    // height: 1080
+    width: 1920
+    height: 1080
     visible: true
     // TODO: Enable this to display the demo in fullscreen
     visibility: "FullScreen"
@@ -50,6 +51,23 @@ Window {
                 verticalAlignment: Text.AlignVCenter
                 horizontalAlignment: Text.AlignHCenter
             }
+
+            Button {
+                id: topBarExitbutton
+                text: "Exit"
+                onClicked: Qt.quit()
+                height: parent.height * 0.4
+                width: height
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.right: parent.right
+
+                background: Rectangle {
+                    color: leftMenuButton4.down ? "#3AAFA9" : "#2B7A78"
+                    border.color: "#DEF2F1"
+                    border.width: 1
+                    radius: parent.height * 0.4
+                }
+            }
         }
         Rectangle {
             id: leftMenu
@@ -60,7 +78,91 @@ Window {
             anchors.left: parent.left
 
             color: "#17252A"
+            ColumnLayout {
+                height: parent.height
+                width: parent.width
+                spacing: parent.height * 0.1
 
+                CheckBox {
+                    id: leftMenuButton1
+                    autoExclusive: true
+                    enabled: false
+                    text: "Image Classification"
+                    display: AbstractButton.TextOnly
+                    height: parent.height * 0.1
+                    width: parent.width * 0.1
+                    Layout.alignment: Qt.AlignHCenter
+                    background: Rectangle {
+                        id: leftMenuButton1BG
+                        // color: !parent.enabled ? "#17252A" : (parent.hovered ? "#DEF2F1" : (parent.pressed===1 ? "#2B7A78" : "#3AAFA9"))
+                        color: !parent.enabled ? "#17252A" : (parent.hovered ? "#FF0000" : (parent.checkState===Qt.Checked ? "#00FF00" : "#0000FF"))
+                        border.color: "#DEF2F1"
+                        border.width: 1
+                        radius: 10
+                    }
+                    onClicked: {
+                        leftMenuButtonenabled: true
+                        mediaplayer1.source = buttonsClicked.leftMenuButtonClicked(1, leftMenu.width, topBar.height, videooutput.width, videooutput.height)
+                        // leftMenuButton1BG.color = "#3AAFA9"
+                    }
+                }
+                CheckBox {
+                    id: leftMenuButton2
+                    autoExclusive: true
+                    text: "Semantic Segmentation"
+                    height: parent.height * 0.1
+                    width: parent.width
+                    Layout.alignment: Qt.AlignHCenter
+                    background: Rectangle {
+                        id: leftMenuButton2BG
+                        color: leftMenuButton2.down ? "#3AAFA9" : "#2B7A78"
+                        border.color: "#DEF2F1"
+                        border.width: 1
+                        radius: 10
+                    }
+                    onClicked: {
+                        mediaplayer1.source = buttonsClicked.leftMenuButtonClicked(2, leftMenu.width, topBar.height, videooutput.width, videooutput.height)
+                    }
+                }
+                CheckBox {
+                    id: leftMenuButton3
+                    autoExclusive: true
+                    text: "Object Detection"
+                    height: parent.height * 0.1
+                    width: parent.width
+                    Layout.alignment: Qt.AlignHCenter
+                    background: Rectangle {
+                        id: leftMenuButton3BG
+                        color: leftMenuButton3.down ? "#3AAFA9" : "#2B7A78"
+                        border.color: "#DEF2F1"
+                        border.width: 1
+                        radius: 10
+                    }
+                    onClicked: {
+                        mediaplayer1.source = buttonsClicked.leftMenuButtonClicked(3, leftMenu.width, topBar.height, videooutput.width, videooutput.height)
+                    }
+                }
+                CheckBox {
+                    id: leftMenuButton4
+                    autoExclusive: true
+                    text: "Custom"
+                    height: parent.height * 0.1
+                    width: parent.width
+                    Layout.alignment: Qt.AlignHCenter
+
+                    background: Rectangle {
+                        id: leftMenuButton4BG
+                        color: leftMenuButton4.down ? "#3AAFA9" : "#2B7A78"
+                        border.color: "#DEF2F1"
+                        border.width: 1
+                        radius: 10
+                    }
+                    onClicked: {
+                        popup.open()
+                    }
+                }
+            }
+            /*
             Button {
                 id: leftMenuButton1
                 text: "Image Classification"
@@ -72,15 +174,15 @@ Window {
                 anchors.horizontalCenter: parent.horizontalCenter
                 background: Rectangle {
                     id: leftMenuButton1BG
-                    color: !parent.enabled ? "#17252A" : (parent.hovered ? "#FF0000" : (buttonsClicked.activeButton===1? "#00FF00" : "#0000FF"))
+                    color: leftMenuButton1.down ? "#3AAFA9" : "#2B7A78"
                     border.color: "#DEF2F1"
                     border.width: 1
                     radius: 10
                 }
                 onClicked: {
+                    leftMenuButtonenabled: true
                     mediaplayer1.source = buttonsClicked.leftMenuButtonClicked(1, leftMenu.width, topBar.height, videooutput.width, videooutput.height)
-                    console.log("buttonsClicked.activeButton == ", buttonsClicked.activeButton)
-                    console.log("activeButton == ", activeButton)
+                    leftMenuButton1BG.color = "#3AAFA9"
                 }
             }
 
@@ -101,8 +203,7 @@ Window {
                 }
                 onClicked: {
                     mediaplayer1.source = buttonsClicked.leftMenuButtonClicked(2, leftMenu.width, topBar.height, videooutput.width, videooutput.height)
-                    console.log("buttonsClicked.activeButton == ", buttonsClicked.activeButton)
-                    console.log("activeButton == ", activeButton)
+                    leftMenuButton2BG.color = "#3AAFA9"
                 }
             }
             Button {
@@ -145,38 +246,52 @@ Window {
                     popup.open()
                 }
             }
+            */
+            /*
+            Binding {
+                target: item
+                property: "rectangle.x"
+                value: 100
+            }
+            */
         }
         Rectangle {
             id: mainWindow
-
+            color: "#17252A"
             width: parent.width * 0.825
-            height: parent.height * 0.8
+            height: parent.height * 0.9
             anchors.top: topBar.bottom
             anchors.left: leftMenu.right
             anchors.rightMargin: parent.width * 0.025
 
-            border.color: "#DEF2F1"
-            border.width: 1
-
-            radius: 10
-            color: "#17252A"
-
-            MediaPlayer {
-                id: mediaplayer1
-                objectName: "mediaplayer1"
-                // source: is provided by the Cpp Backend
-                autoPlay: false
-            }
-
-            VideoOutput {
-                id: videooutput
-                // anchors.margins: 2
+            Rectangle {
                 width: parent.width
-                height: parent.height
-                source: mediaplayer1
-                fillMode: VideoOutput.PreserveAspectCrop
+                height: (parent.width / 16) * 9
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.verticalCenter: parent.verticalCenter
+                border.color: "#DEF2F1"
+                border.width: 1
+
+                radius: 10
+                color: "#17252A"
+
+                MediaPlayer {
+                    id: mediaplayer1
+                    objectName: "mediaplayer1"
+                    // source: is provided by the Cpp Backend
+                    autoPlay: true
+                }
+
+                VideoOutput {
+                    id: videooutput
+                    width: parent.width
+                    height: parent.height
+                    source: mediaplayer1
+                    fillMode: VideoOutput.PreserveAspectCrop
+                }
             }
         }
+        /*
         Rectangle {
             id: bottomBar
 
@@ -231,6 +346,7 @@ Window {
                 }
             }
         }
+        */
     }
 
     Popup {
