@@ -3,12 +3,10 @@ import QtQuick.Window 2.1
 import QtQuick.Controls 2.1
 import QtMultimedia 5.1
 import Qt.labs.folderlistmodel 2.4
+import QtGraphicalEffects 1.12
 
 Window {
-    // width: 1920
-    // height: 1080
     visible: true
-    // TODO: Enable this to display the demo in fullscreen
     visibility: "FullScreen"
     title: qsTr("AM62A EdgeAI Demo")
 
@@ -28,15 +26,18 @@ Window {
 
             Image {
                 id: topBarLogo
+                scale: Qt.KeepAspectRatio
                 width: parent.width * 0.2
-                height: parent.height
+                height: parent.height * 0.9
+                anchors.top: parent.top
+                anchors.topMargin: parent.height * 0.1
                 source: "images/Texas-Instruments.png"
             }
 
             Text {
                 id: topBarHead
                 objectName: "topBarHead"
-                text: qsTr("AM62A EdgeAI Demo")
+                text: qsTr("EdgeAI App")
 
                 width: parent.width * 0.8
                 height: parent.height
@@ -53,19 +54,25 @@ Window {
 
             Button {
                 id: topBarExitButton
-                text: "X"
+                text: "×"
                 onClicked: Qt.quit()
                 height: parent.height * 0.2
                 width: height
-                // anchors.verticalCenter: parent.verticalCenter
+
                 anchors.right: parent.right
-                anchors.rightMargin: width
+                anchors.rightMargin: width * 0.5
                 anchors.top: parent.top
-                anchors.topMargin: height
+                anchors.topMargin: height * 0.5
 
                 background: Rectangle {
-                    color: parent.hovered ? "#CC0000" : "#FF0000"
+                    color: parent.hovered ? "#FF0000" : "#CCCCCC"
                     radius: parent.height
+                    /* Image {
+                        source: "images/exit.png"
+                        height: parent.height
+                        width: parent.width
+                    }
+                    */
                 }
             }
         }
@@ -79,7 +86,7 @@ Window {
 
             color: "#17252A"
 
-            Button {
+            CheckBox {
                 id: leftMenuButton1
                 text: "Image Classification"
 
@@ -88,20 +95,30 @@ Window {
                 anchors.top: parent.top
                 anchors.topMargin: parent.height * 0.1
                 anchors.horizontalCenter: parent.horizontalCenter
+                indicator: Rectangle {}
                 background: Rectangle {
                     id: leftMenuButton1BG
-                    color: !parent.enabled ? "#17252A" : (parent.hovered ? "#FF0000" : (buttonsClicked.activeButton===1? "#00FF00" : "#0000FF"))
+                    color: !parent.enabled ? "#17252A" : (parent.hovered ? "#84CDC9" : (parent.checkState===Qt.Checked? "#2B837F" : "#3AAFA9"))
                     border.color: "#DEF2F1"
                     border.width: 1
                     radius: 10
                 }
-                onClicked: {
-                    mediaplayer1.source = buttonsClicked.leftMenuButtonClicked(1, leftMenu.width, topBar.height, videooutput.width, videooutput.height)
-                    console.log("buttonsClicked.activeButton == ", buttonsClicked.activeButton)
+                onCheckStateChanged: {
+                    if (leftMenuButton1.checked) {
+                        mediaplayer1.source = buttonsClicked.leftMenuButtonClicked(1, leftMenu.width, topBar.height + (mainWindow.height - alignVideo.height)/2, videooutput.width, videooutput.height)
+                        leftMenuButton2.enabled = false
+                        leftMenuButton3.enabled = false
+                        leftMenuButton4.enabled = false
+                    } else {
+                        mediaplayer1.source = " "
+                        leftMenuButton2.enabled = true
+                        leftMenuButton3.enabled = true
+                        leftMenuButton4.enabled = true
+                    }
                 }
             }
 
-            Button {
+            CheckBox {
                 id: leftMenuButton2
                 text: "Semantic Segmentation"
                 height: parent.height * 0.1
@@ -109,19 +126,29 @@ Window {
                 anchors.top: leftMenuButton1.bottom
                 anchors.topMargin: parent.height * 0.1
                 anchors.horizontalCenter: parent.horizontalCenter
+                indicator: Rectangle {}
                 background: Rectangle {
                     id: leftMenuButton2BG
-                    color: !parent.enabled ? "#17252A" : (parent.hovered ? "#FF0000" : (buttonsClicked.activeButton===1? "#00FF00" : "#0000FF"))
+                    color: !parent.enabled ? "#17252A" : (parent.hovered ? "#84CDC9" : (parent.checkState===Qt.Checked? "#2B837F" : "#3AAFA9"))
                     border.color: "#DEF2F1"
                     border.width: 1
                     radius: 10
                 }
-                onClicked: {
-                    mediaplayer1.source = buttonsClicked.leftMenuButtonClicked(2, leftMenu.width, topBar.height, videooutput.width, videooutput.height)
-                    console.log("buttonsClicked.activeButton == ", buttonsClicked.activeButton)
+                onCheckStateChanged: {
+                    if (leftMenuButton2.checked) {
+                        mediaplayer1.source = buttonsClicked.leftMenuButtonClicked(2, leftMenu.width, topBar.height + (mainWindow.height - alignVideo.height)/2, videooutput.width, videooutput.height)
+                        leftMenuButton1.enabled = false
+                        leftMenuButton3.enabled = false
+                        leftMenuButton4.enabled = false
+                    } else {
+                        mediaplayer1.source = " "
+                        leftMenuButton1.enabled = true
+                        leftMenuButton3.enabled = true
+                        leftMenuButton4.enabled = true
+                    }
                 }
             }
-            Button {
+            CheckBox {
                 id: leftMenuButton3
                 text: "Object Detection"
                 height: parent.height * 0.1
@@ -129,19 +156,29 @@ Window {
                 anchors.top: leftMenuButton2.bottom
                 anchors.topMargin: parent.height * 0.1
                 anchors.horizontalCenter: parent.horizontalCenter
+                indicator: Rectangle {}
                 background: Rectangle {
                     id: leftMenuButton3BG
-                    color: !parent.enabled ? "#17252A" : (parent.hovered ? "#FF0000" : (buttonsClicked.activeButton===1? "#00FF00" : "#0000FF"))
+                    color: !parent.enabled ? "#17252A" : (parent.hovered ? "#84CDC9" : (parent.checkState===Qt.Checked? "#2B837F" : "#3AAFA9"))
                     border.color: "#DEF2F1"
                     border.width: 1
                     radius: 10
                 }
-                onClicked: {
-                    mediaplayer1.source = buttonsClicked.leftMenuButtonClicked(3, leftMenu.width, topBar.height, videooutput.width, videooutput.height)
-                    console.log("buttonsClicked.activeButton == ", buttonsClicked.activeButton)
+                onCheckStateChanged: {
+                    if (leftMenuButton3.checked) {
+                        mediaplayer1.source = buttonsClicked.leftMenuButtonClicked(3, leftMenu.width, topBar.height + (mainWindow.height - alignVideo.height)/2, videooutput.width, videooutput.height)
+                        leftMenuButton1.enabled = false
+                        leftMenuButton2.enabled = false
+                        leftMenuButton4.enabled = false
+                    } else {
+                        mediaplayer1.source = " "
+                        leftMenuButton1.enabled = true
+                        leftMenuButton2.enabled = true
+                        leftMenuButton4.enabled = true
+                    }
                 }
             }
-            Button {
+            CheckBox {
                 id: leftMenuButton4
                 text: "Custom"
                 height: parent.height * 0.1
@@ -149,16 +186,26 @@ Window {
                 anchors.top: leftMenuButton3.bottom
                 anchors.topMargin: parent.height * 0.1
                 anchors.horizontalCenter: parent.horizontalCenter
+                indicator: Rectangle {}
                 background: Rectangle {
                     id: leftMenuButton4BG
-                    color: !parent.enabled ? "#17252A" : (parent.hovered ? "#FF0000" : (buttonsClicked.activeButton===1? "#00FF00" : "#0000FF"))
+                    color: !parent.enabled ? "#17252A" : (parent.hovered ? "#84CDC9" : (parent.checkState===Qt.Checked? "#2B837F" : "#3AAFA9"))
                     border.color: "#DEF2F1"
                     border.width: 1
                     radius: 10
                 }
-                onClicked: {
-                    console.log("buttonsClicked.activeButton == ", buttonsClicked.activeButton)
-                    popup.open()
+                onCheckStateChanged: {
+                    if (leftMenuButton4.checked) {
+                        popup.open()
+                        leftMenuButton1.enabled = false
+                        leftMenuButton2.enabled = false
+                        leftMenuButton3.enabled = false
+                    } else {
+                        mediaplayer1.source = " "
+                        leftMenuButton1.enabled = true
+                        leftMenuButton2.enabled = true
+                        leftMenuButton3.enabled = true
+                    }
                 }
             }
         }
@@ -172,15 +219,23 @@ Window {
             anchors.rightMargin: parent.width * 0.025
 
             Rectangle {
+                id: alignVideo
                 width: parent.width
                 height: (parent.width / 16) * 9
                 anchors.horizontalCenter: parent.horizontalCenter
-                anchors.verticalCenter: parent.verticalCenter
+                anchors.top: parent.top
+                anchors.topMargin: (parent.height - height) / 2
                 border.color: "#DEF2F1"
                 border.width: 1
 
                 radius: 10
                 color: "#17252A"
+
+                Image {
+                    width: parent.width
+                    height: parent.height
+                    source: "images/sk-am62-angled.png"
+                }
 
                 MediaPlayer {
                     id: mediaplayer1
@@ -197,98 +252,219 @@ Window {
                     fillMode: VideoOutput.PreserveAspectCrop
                 }
             }
-        }
-    }
+            Popup {
+                id: popup
+                anchors.centerIn: parent
+                onClosed: {
+                    leftMenuButton4.checked = false
+                }
 
-    Popup {
-        id: popup
+                width: alignVideo.width * 0.6
+                height: alignVideo.height * 0.6
 
-        leftMargin: parent.width * 0.2
-        width: parent.width * 0.6
-        topMargin: parent.height * 0.2
-        height: parent.height * 0.6
+                modal: true
+                focus: true
+                closePolicy: Popup.NoAutoClose
 
-        modal: true
-        focus: true
-        closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside
+                background: Rectangle {
+                    width: parent.width
+                    height: parent.height
+                    border.color: "#DEF2F1"
+                    border.width: 10
+                }
 
-        background: Rectangle {
-            width: parent.width
-            height: parent.height
-            border.color: "#DEF2F1"
-            border.width: 10
-        }
+                Text {
+                    id: inputTypeHead
+                    text: qsTr("Input Type: ")
+                    font.pointSize: 11
+                    anchors.bottom: popupInputType.top
+                    anchors.bottomMargin: popupInputType.height * 0.2
+                    anchors.left: parent.left
+                    anchors.leftMargin: parent.width * 0.15
+                }
 
-        Text {
-            id: inputTypeHead
-            text: qsTr("Input Type: ")
-            font.pointSize: 15
-            anchors.top: parent.top
-            anchors.topMargin: parent.height * 0.2
-            anchors.left: parent.left
-            anchors.leftMargin: parent.width * 0.15
-        }
+                ComboBox {
+                    id: popupInputType
+                    width: parent.width * 0.3
+                    anchors.top: parent.top
+                    anchors.topMargin: parent.height * 0.25
+                    anchors.left: parent.left
+                    anchors.leftMargin: parent.width * 0.15
 
-        ComboBox {
-            id: popupInputType
-            width: parent.width * 0.3
-            anchors.top: inputTypeHead.bottom
-            anchors.topMargin: inputTypeHead.font.pointSize * 0.5
-            anchors.left: parent.left
-            anchors.leftMargin: parent.width * 0.15
-            currentIndex: 0
-            editable: true
-            model: ListModel {
-                id: popupInputTypeOptions
-                ListElement { name: "Input Type" }
-                ListElement { name: "Image" }
-                ListElement { name: "Video" }
-                ListElement { name: "Camera" }
+                    model: ListModel {
+                        id: popupInputTypeOptions
+                        ListElement { name: "Image" }
+                        ListElement { name: "Video" }
+                        ListElement { name: "Camera" }
+                    }
+                    onCurrentIndexChanged: {
+                        console.debug(popupInputTypeOptions.get(currentIndex))
+                        popupMenu.popupInputTypeSelected(model.get(currentIndex).name)
+                        if (popupInputTypeOptions.get(currentIndex).name === "Image") {
+                            popupInputImages.visible = true
+                            popupInputVideos.visible = false
+                            popupInputCameras.visible = false
+                        }
+                        if (popupInputTypeOptions.get(currentIndex).name === "Video") {
+                            popupInputImages.visible = false
+                            popupInputVideos.visible = true
+                            popupInputCameras.visible = false
+                        }
+                        if (popupInputTypeOptions.get(currentIndex).name === "Camera") {
+                            popupInputImages.visible = false
+                            popupInputVideos.visible = false
+                            popupInputCameras.visible = true
+                        }
+                    }
+                }
+                Text {
+                    id: inputHead
+                    text: qsTr("Input: ")
+                    font.pointSize: 11
+                    anchors.bottom: popupInputImages.top
+                    anchors.bottomMargin: popupInputImages.height * 0.2
+                    anchors.left: popupInputType.right
+                    anchors.leftMargin: parent.width * 0.1
+                }
+                ComboBox {
+                    id: popupInputImages
+                    visible: false
+                    width: parent.width * 0.3
+                    anchors.left: popupInputType.right
+                    anchors.leftMargin: parent.width * 0.1
+                    anchors.top: parent.top
+                    anchors.topMargin: parent.height * 0.25
+
+                    FolderListModel{
+                        id: inputImagesFolder
+                        folder: "file:///opt/edgeai-test-data/images/"
+                        nameFilters: [ "*.jpg", "*.png" ]
+                    }
+
+                    model: inputImagesFolder
+                    textRole: 'fileName'
+                    onCurrentIndexChanged: {
+                        console.debug(model.get(currentIndex, "filePath"))
+                    }
+                    onVisibleChanged: {
+                        if(visible)
+                            inputHead.text = qsTr("Image: ")
+                    }
+                }
+                ComboBox {
+                    id: popupInputVideos
+                    visible: false
+                    width: parent.width * 0.3
+                    anchors.left: popupInputType.right
+                    anchors.leftMargin: parent.width * 0.1
+                    anchors.top: parent.top
+                    anchors.topMargin: parent.height * 0.25
+
+                    FolderListModel{
+                        id: inputVideosFolder
+                        folder: "file:///opt/edgeai-test-data/videos/"
+                        nameFilters: [ "*.mp4", "*.h264", "*.avi" ]
+                    }
+
+                    model: inputVideosFolder
+                    textRole: 'fileName'
+                    onCurrentIndexChanged: {
+                        console.debug(model.get(currentIndex, "filePath"))
+                    }
+                    onVisibleChanged: {
+                        if(visible)
+                            inputHead.text = qsTr("Video: ")
+                    }
+                }
+                ComboBox {
+                    id: popupInputCameras
+                    visible: false
+                    width: parent.width * 0.3
+                    anchors.left: popupInputType.right
+                    anchors.leftMargin: parent.width * 0.1
+                    anchors.top: parent.top
+                    anchors.topMargin: parent.height * 0.25
+
+                    model: cameraNamesList
+                    textRole: 'display'
+
+                    onCurrentIndexChanged: {
+                        console.debug(model.data(model.index(currentIndex, 0)))
+                    }
+                    onVisibleChanged: {
+                        if(visible)
+                            inputHead.text = qsTr("Camera: ")
+                    }
+                }
+                Text {
+                    id: modelHead
+                    text: qsTr("Model Type: ")
+                    font.pointSize: 11
+                    anchors.bottom: popupModelType.top
+                    anchors.bottomMargin: popupModelType.height * 0.2
+                    anchors.left: parent.left
+                    anchors.leftMargin: parent.width * 0.15
+                }
+                ComboBox {
+                    id: popupModelType
+                    width: parent.width * 0.3
+                    anchors.top: popupInputType.bottom
+                    anchors.topMargin: parent.height * 0.1
+                    anchors.left: parent.left
+                    anchors.leftMargin: parent.width * 0.15
+                    model: modelsFolder
+                    textRole: 'fileName'
+
+                    FolderListModel{
+                        id: modelsFolder
+                        folder: "file:///opt/model_zoo/"
+                    }
+                    onCurrentIndexChanged: {
+                        console.debug(model.get(currentIndex, "filePath"))
+                    }
+                }
+                Button {
+                    id: popupOkButton
+                    text: "Start"
+                    onClicked: {
+                        console.log("TODO: Start Pressed. Implement the pipeline in Backend now :)")
+                        popup.close()
+                    }
+
+                    width: parent.width * 0.2
+                    height: parent.height * 0.075
+
+                    anchors.bottom: parent.bottom
+                    anchors.bottomMargin: parent.height * 0.1
+                    anchors.left: parent.left
+                    anchors.leftMargin: parent.width * 0.25
+
+                    background: Rectangle {
+                        color: parent.hovered ? "#3AAFA9" : "#CCCCCC"
+                        radius: parent.height
+                    }
+                }
+                Button {
+                    id: popupCancelButton
+                    text: "Cancel"
+                    onClicked: {
+                        popup.close()
+                    }
+
+                    width: parent.width * 0.2
+                    height: parent.height * 0.075
+
+                    anchors.bottom: parent.bottom
+                    anchors.bottomMargin: parent.height * 0.1
+                    anchors.right: parent.right
+                    anchors.rightMargin: parent.width * 0.25
+
+                    background: Rectangle {
+                        color: parent.hovered ? "#3AAFA9" : "#CCCCCC"
+                        radius: parent.height
+                    }
+                }
             }
-            onCurrentIndexChanged: {
-                console.debug(popupInputTypeOptions.get(currentIndex).textRole)
-                popupMenu.popupInputTypeSelected(popupInputTypeOptions.get(currentIndex).name)
-                if (popupInputTypeOptions.get(currentIndex.name) === "Image")
-                    inputsFolder.folder = "file:///home/kart/Pictures"
-                if (popupInputTypeOptions.get(currentIndex.name) === "Video")
-                    inputsFolder.folder = "file:///home/kart/Videos"
-                if (popupInputTypeOptions.get(currentIndex.name) === "Camera")
-                    inputsFolder.folder = "file:///dev"
-            }
-        }
-        ComboBox {
-            id: popupInput
-            width: parent.width * 0.3
-            anchors.left: popupInputType.right
-            anchors.leftMargin: parent.width * 0.1
-            anchors.top: parent.top
-            anchors.topMargin: parent.height * 0.2
-
-            model: folderModel
-            textRole: "fileName"
-
-            FolderListModel {
-                id: inputsFolder
-                folder: "file:///dev"
-            }
-            onCurrentIndexChanged: console.debug(popupInputOptions.get(currentIndex).textRole)
-        }
-
-        ComboBox {
-            id: popupModel
-            width: parent.width * 0.3
-            anchors.top: popupInputType.bottom
-            anchors.topMargin: parent.height * 0.1
-            anchors.left: parent.left
-            anchors.leftMargin: parent.width * 0.15
-            model: folderModel
-            textRole: "fileName"
-
-            FolderListModel {
-                id: modelsFolder
-                folder: "/opt/models_zoo/"
-            }
-            onCurrentIndexChanged: console.debug(popupInputOptions.get(currentIndex).textRole)
         }
     }
 }
